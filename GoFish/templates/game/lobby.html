@@ -10,6 +10,10 @@
     <div class="row placeholders">
         {% if Name %}
             <h3>You are: {{ Player }}, Your game id is: {{ GameID }}</h3>
+            <h5> List of users: </h5>
+            {% for Player in users %}
+                    <h5>{{ Player.displayName }}</h5>
+            {% endfor %}
         {% else %}
             <form role="form" id = "Name" method="post" action="">
                 {% csrf_token %}

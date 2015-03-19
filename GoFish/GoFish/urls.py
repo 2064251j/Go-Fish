@@ -7,4 +7,5 @@ urlpatterns = patterns('',
     #url(r'^$', include('game.urls')),
     url(r'^$', views.index, name='index'),
     url(r'^lobby$', views.lobby, name='lobby'),
+    url(r'^lobby/(?P<game_id>[0-9]+)/$', views.lobby, name='lobby'),
 )
