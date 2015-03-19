@@ -1,7 +1,8 @@
 from django.db import models
+import uuid
 
 class Game(models.Model):
-    gameLobbyID = models.CharField(max_length=128, unique=True)
+    gameLobbyID = models.CharField(max_length=128, unique=True, default=uuid.uuid4)
     numOfPlayers = models.IntegerField(default=0)
     score = models.IntegerField(default=0)
 
@@ -10,7 +11,7 @@ class Game(models.Model):
 
 class Player(models.Model):
     gameLobbyID = models.ForeignKey(Game)
-    playerID = models.CharField(max_length=128, unique=True)
+    playerID = models.CharField(max_length=128, unique=True, default=uuid.uuid4)
     displayName = models.CharField(max_length=12)
 
     def __unicode__(self):
