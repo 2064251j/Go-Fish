@@ -8,13 +8,19 @@ class PlayerAdmin(admin.ModelAdmin):
     list_display = ('gameLobbyID', 'playerID', 'displayName')
 
 class CardAdmin(admin.ModelAdmin):
-    list_display = ('cardID')
+    list_display = ('cardID',)
 
 class HandAdmin(admin.ModelAdmin):
-    list_display = ('playerID', 'cardID')
+    list_display = ('playerID', 'get_cards')
+
+    def get_cards(self, obj):
+        return "\n".join([p.cardID for p in obj.cardID.all()])
 
 class PoolAdmin(admin.ModelAdmin):
-    list_display = ('cardID')
+    list_display = ('get_cards',)
+
+    def get_cards(self, obj):
+        return "\n".join([p.cardID for p in obj.cardID.all()])
 
 admin.site.register(Game, GameAdmin)
 admin.site.register(Player, PlayerAdmin)
