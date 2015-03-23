@@ -4,7 +4,7 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'GoFish.settings')
 import django
 django.setup()
 
-from game.models import Player, Card
+from game.models import Card
 
 def populate():
 
