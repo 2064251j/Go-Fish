@@ -10,12 +10,13 @@
     <div class="row placeholders">
             <h4>You are: {{ Player }}, Your game id is: {{ GameID }}. <br> You have a hand:
             {% for card in hand %}
-                    <h5>{{ card }}</h5>
+                    {{ card }}
             {% endfor %}
             <br></h4>
             <h5> List of users: </h5>
             {% for Player in users %}
                     <h5>{{ Player.displayName }}</h5>
             {% endfor %}
+            <h5>score: {{ results }}. Number of players: {{ playerNumber }}.<h5>
     </div>
 {% endblock %}
