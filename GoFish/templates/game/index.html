@@ -4,10 +4,22 @@
 
 
 {% block body_block %}
+
 <div class="page-header">
     <h1>Index Page</h1>
 </div>
+
     <div class="row placeholders">
-        <a href="{% url 'lobby' %}"> Create a game </a>
+	<a href="{% url 'lobby' %}"> Create a game </a></p>
     </div>
+	
+<div style="height:400px;width:400px;border:1px solid #ccc;font:14px/26px Georgia, Garamond, Serif;overflow:auto;">
+----------------------BASIC RULES----------------------
+<br>Players: 2-6. 
+<br>Each player gets five cards. If you are dealt a four of a kind, or get four of a kind during game play, those cards are removed from your hand, and you get a point.</br>
+<br>Moving clockwise, players take turns asking a specific player for a given rank of card. If someone asks you for a rank that you have, the cards are taken from your hand. if you do not have any cards of that rank, your opponent must go fish, taking one new card from the pile of cards.</br>
+<br>When it's your turn, select a player you think might have a needed card. Pick one card from your hand of the desired rank. If the player has the desired card, he or she must pass it over. If not, you must go fish. If you get the card you asked for, you get to go again.</br>
+<br>If you run out of cards and there are still cards left, you get five free cards.</br>
+<br>Play continues until all hands are empty and there are no more cards to draw from. The winner is the player with the most points at the end of the game.</br>
+</div>
 {% endblock %}
