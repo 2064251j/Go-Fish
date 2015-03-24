@@ -7,6 +7,20 @@
 <div class="page-header">
     <h1>Game Lobby</h1>
 </div>
+
+<FORM ACTION="../cgi-bin/mycgi.pl">
+
+<INPUT TYPE=CHECKBOX NAME="rule1">Players give just one card when they're asked<BR>
+<INPUT TYPE=CHECKBOX NAME="rule2">A player whose call is unsuccessful and draws the card being asked for gets another turn.<BR>
+<INPUT TYPE=CHECKBOX NAME="rule3">Players form and lay down pairs.<BR>
+<INPUT TYPE=CHECKBOX NAME="rule4">A player who runs out of cards must wait until the game is over and cannot gain any more cards or books.<BR>
+<INPUT TYPE=CHECKBOX NAME="rule5">Jokers can be used to create a book by asking another player if they have any jokers in their hand. Two jokers form one book.<BR>
+<INPUT TYPE=CHECKBOX NAME="rule6">The winner is the player at the end with the most books. Even if players before them have run out of cards.<BR>
+<INPUT TYPE=CHECKBOX NAME="rule7">If the other players got all their matches and one player has a card left while no more go-fish cards to draw, the player with the remaining card loses the game.<P>
+
+<INPUT TYPE=SUBMIT VALUE="Play with these rules!">
+</FORM>
+
     <div class="row placeholders">
         {% if Name %}
             <h3>You are: {{ Player }}, Your game id is: {{ GameID }}</h3>
