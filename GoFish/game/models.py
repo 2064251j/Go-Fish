@@ -1,9 +1,12 @@
+import datetime
 from django.db import models
 
 class Game(models.Model):
     gameLobbyID = models.CharField(max_length=128, unique=True)
     numOfPlayers = models.IntegerField(default=0)
     score = models.IntegerField(default=0)
+    gameCreator = models.TextField(default="")
+    gameStarted = models.TimeField(default=datetime.datetime.utcnow())
 
     def __unicode__(self):
         return self.gameLobbyID
@@ -18,6 +21,8 @@ class Player(models.Model):
 
 class Card(models.Model):
     cardID = models.IntegerField(max_length=2)
+    suit = models.CharField(max_length=10, default="")
+    rank = models.CharField(max_length=1, default="")
 
     def __unicode__(self):
         return self.cardID
