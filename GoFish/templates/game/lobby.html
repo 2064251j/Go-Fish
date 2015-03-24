@@ -10,24 +10,61 @@
 
     <div class="row placeholders">
         {% if Name %}
-            <h3>You are: {{ Player }}, Your game id is: {{ GameID }}</h3>
-            <h5> List of users: </h5>
-            {% for Player in users %}
-                    <h5>{{ Player.displayName }}</h5>
-            {% endfor %}
-            <h3> Select additional rules to play with: </h3>
-            <FORM ACTION="../cgi-bin/mycgi.pl">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-4 placeholder col-md-offset-1">
+                        <table class="table table-bordered">
+                            <caption> Players in the Lobby: </caption>
+                            <tbody>
+                                {% for user in users %}
+                                    <tr>
+                                    {%if user.displayName == Player%}
+                                        <td class = "info" >{{ user.displayName }}</td>
+                                    {% else %}
+                                        <td>{{ user.displayName }}</td>
+                                    {% endif %}
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-md-6 placeholder">
+                        <table class="table table-bordered">
+                            <caption> The more the merrier: </caption>
+                            <tbody><tr>
+                            <td> Link for your friends: </td>
+                            <td class = "info" >http://lapinas.pythonanywhere.com/lobby/{{GameID}}/ </td>
+                            </tr></tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 placeholder">
+                        <h3> Select additional rules to play with: </h3>
+                        <FORM action="{% url 'game' GameID %}">
+                            <div class="form-group">
+                                <div class="checkbox">
+                                    <INPUT TYPE=CHECKBOX NAME="rule1" disabled>Players give just one card when they're asked<BR>
+                                </div><div class="checkbox">
+                                    <INPUT TYPE=CHECKBOX NAME="rule2" disabled>A player whose call is unsuccessful and draws the card being asked for gets another turn.<BR>
+                                </div><div class="checkbox">
+                                    <INPUT TYPE=CHECKBOX NAME="rule3" disabled>Players form and lay down pairs.<BR>
+                                </div><div class="checkbox">
+                                    <INPUT TYPE=CHECKBOX NAME="rule4" disabled>A player who runs out of cards must wait until the game is over and cannot gain any more cards or books.<BR>
+                                </div><div class="checkbox">
+                                    <INPUT TYPE=CHECKBOX NAME="rule5" disabled>Jokers can be used to create a book by asking another player if they have any jokers in their hand. Two jokers form one book.<BR>
+                                </div><div class="checkbox">
+                                    <INPUT TYPE=CHECKBOX NAME="rule6" disabled>The winner is the player at the end with the most books. Even if players before them have run out of cards.<BR>
+                                </div><div class="checkbox">
+                                    <INPUT TYPE=CHECKBOX NAME="rule7" disabled>If the other players got all their matches and one player has a card left while no more go-fish cards to draw, the player with the remaining card loses the game.<P>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-default">Start the game!</button>
+                        </FORM>
+                    </div>
+                </div>
+            </div>
 
-            <INPUT TYPE=CHECKBOX NAME="rule1">Players give just one card when they're asked<BR>
-            <INPUT TYPE=CHECKBOX NAME="rule2">A player whose call is unsuccessful and draws the card being asked for gets another turn.<BR>
-            <INPUT TYPE=CHECKBOX NAME="rule3">Players form and lay down pairs.<BR>
-            <INPUT TYPE=CHECKBOX NAME="rule4">A player who runs out of cards must wait until the game is over and cannot gain any more cards or books.<BR>
-            <INPUT TYPE=CHECKBOX NAME="rule5">Jokers can be used to create a book by asking another player if they have any jokers in their hand. Two jokers form one book.<BR>
-            <INPUT TYPE=CHECKBOX NAME="rule6">The winner is the player at the end with the most books. Even if players before them have run out of cards.<BR>
-            <INPUT TYPE=CHECKBOX NAME="rule7">If the other players got all their matches and one player has a card left while no more go-fish cards to draw, the player with the remaining card loses the game.<P>
-
-            <INPUT TYPE=SUBMIT VALUE="Play with these rules!" disabled>
-            </FORM>
         {% else %}
             <form role="form" id = "Name" method="post" action="">
                 {% csrf_token %}
