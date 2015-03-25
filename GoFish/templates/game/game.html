@@ -7,7 +7,7 @@
 <div class="page-header">
     <h1>Game</h1>
 </div>
-	
+	<div class="row placeholders">
         {% if playerNumber == 2 %}
 			<style>
 			div.player1 {
@@ -158,10 +158,7 @@
 			<div class="player6">Player6</div>
 			</body>
 		
-
         {% endif %}
-	
-	<div class="row placeholders">
 		<h5 style="position:absolute; left:50; top:20">score: {{ results }}. Number of players: {{ playerNumber }}.</h5>
     </div>
 {% endblock %}
