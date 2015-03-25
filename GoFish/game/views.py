@@ -9,15 +9,21 @@ def index(request):
     # Render the response and send it back!
     return render(request, 'game/index.html', context_dict)
 
+def ready(request):
+    if request.is_ajax():
+        gId = request.POST['id']
+        if Game.objects.filter(lobbyID = gId).exists():
+            if Game.objects.get(lobbyID = gId).started:
+                return HttpResponse('<button onclick="location.href=\'/game/'+gId+'/\'" class="btn btn-default">Join the game!</button>')
+            else:
+                return HttpResponse('Waiting...')
+    return HttpResponse('Waiting.')
+
+
 
 def lobby(request, game_id = None):
     context_dict = {}
-    if request.is_ajax():
-        if Game.objects.get(lobbyID = game_id).exists():
-            if Game.objects.get(lobbyID = game_id).started:
-                return HttpResponse('Game is ready.')
-            else:
-                return HttpResponse('Waiting...')
+
     # If there is no such a game:
     if game_id == None:
         # If player is in different game
@@ -51,7 +57,7 @@ def lobby(request, game_id = None):
             return redirect('/lobby/'+str(player.lobbyID))
         if game.started == True:
             return redirect('/game/'+str(player.lobbyID))
-        context_dict['Player'] = player.displayName
+        context_dict['Player'] = player
         context_dict['GameID'] = game_id
         player.lobbyID = game
         player.save()
@@ -78,7 +84,7 @@ def lobby(request, game_id = None):
                     game.save()
                 request.session['Player'] = player.playerID
                 context_dict['Name'] = True
-                context_dict['Player'] = player.displayName
+                context_dict['Player'] = player
                 users = Player.objects.filter(lobbyID=game)
                 context_dict['users'] = users
 
