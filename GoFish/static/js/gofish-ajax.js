@@ -1,6 +1,3 @@
-var t = '';
-var w = '';
-
 function refresh() {
     var gId = $('#response').attr('game-id');
     var link = $('#response').attr('url');
@@ -20,39 +17,45 @@ function refresh() {
     setTimeout("refresh()", 3000);
 }
 
-function play() {
-    var gId = $('#response').attr('game-id');
-    var link = $('#response').attr('url');
+function refresh2() {
     $.ajax({
         type: "POST",
-        url: link,
+        url: "/ready2",
         data: {
                 csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value,
-                id: gId,
-                target : t,
-                wanted : w,
                 },
         success: function(data) {
-            $('#response').html(data);
+            var users = $('#cards').empty();
+            $('#cards').html(data);
         }
     });
-    t = "";
-    w = "";
+    setTimeout("refresh2()", 3000);
 }
 
-function target() {
-    t = event.target.id;
-    alert(t);
-    if (w != ""){
-        play();
-        alert("what");
-    }
-}
-function wanted() {
-    w = event.target.id;
-    alert(w);
-    if (t != ""){
-        play();
-        alert("what");
-    }
-}
+
+
+function create_post() {
+    console.log("create post is working!") // sanity check
+    $.ajax({
+        url : "/create_post/", // the endpoint
+        type : "POST", // http method
+        data : {
+            csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value,
+            target : $('input[name=target]:checked', '#game').val(),
+            wanted : $('input[name=wanted]:checked', '#game').val(),},
+
+        // handle a successful response
+        success : function(json) {
+            $('#wanted').val(''); // remove the value from the input
+            console.log(json); // log the returned json to the console
+            console.log("success"); // another sanity check
+        },
+
+        // handle a non-successful response
+        error : function(xhr,errmsg,err) {
+            $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: "+errmsg+
+                " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
+            console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+        }
+    });
+};

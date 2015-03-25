@@ -5,29 +5,44 @@
 
 {% block body_block %}
 <div class="page-header">
+    <h3>When you think of The Game, you lose The Game. </h3>
 </div>
 {% csrf_token %}
-<div id="response" game-id="{{ GameID }}" url = "{% url 'game' GameID %}" >
+<div id="response">
 	<div class="row placeholders">
-    	    <div class="row">
-    	        {% for user in users %}
-    	            {%if user != Player%}
-                        <div class="container col-md-2" id="{{ user.displayName }}" onclick="target();">{{ user.displayName }}</div>
-                    {% endif %}
-                {% endfor %}
-            </div>
-            <div class = "row">
-                <div id = "player" class="container col-md-4 col-md-offset-4" id = "pool">Pool</div>
-            </div>
-            <div class="row">
-                <div class="container col-md-2 col-md-offset-5" id = "{{ Player.displayName }}"><h3>Your cards: <br />{% for card in hand %} <div style="border: 2px solid;" onclick="wanted();" id="{{card.rank}}">{{card.rank}}</div> {% endfor %}</h3></div>
-            </div>
-            <div class="row">
-                <div class="container col-md-4 col-md-offset-4"><h4>score: {{ results }}. Number of players: {{ playerNumber }}.</h4></div>
-            </div>
-
+	        <form role="form" id = "game" method="post" action="/create_post/">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-md-3 placeholder col-md-offset-3">
+                        {% for user in users %}
+            	            {%if user != Player%}
+                                <div class="radio">
+                                    <label>
+                                    <input type="radio" name="target" id="{{ user.playerID }}" value="{{ user.playerID }}" checked>
+                                    {{ user.displayName }}
+                                    </label>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    <div class="col-md-3 placeholder" id = "cards">
+                        {% for card in hand %}
+                            <div class="radio">
+                                <label>
+                                <input type="radio" name="wanted" id="{{card.rank}}" value="{{card.rank}}" checked>
+                                {{card.rank}} {{card.suit}}
+                                </label>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-default"> Submit </button>
+            </form>
         <script>
-            jQuery( document ).ready(function( $ ) {
+            $('#game').on('submit', function(event){
+                event.preventDefault();
+                console.log("form submitted!")  // sanity check
+                create_post();
             });
         </script>
     </div>
