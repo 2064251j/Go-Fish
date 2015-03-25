@@ -158,16 +158,62 @@ def game(request, game_id = None):
                     hand.cardID.add(card)
                     pool.cardID.remove(card)
 
-        if request.method == 'POST':
-            person = request["target"]
-            wanted = request["wanted"]
+        if request.is_ajax():
+            gId = request.POST['id']
+            person = request.POST["target"]
+            wanted = request.POST["wanted"]
             if users.filter(playerID = person).exists():
                 target = users.filter(playerID = person)
                 crops = Hand.objects.get(playerID = target).cardID.all()
+                goFish = True
                 for card in crops:
                     if card.rank == wanted:
+                        goFish = False
                         Hand.objects.get(playerID = plays).cardID.add(card)
                         Hand.objects.get(playerID = target).cardID.remove(card)
+                if goFish:
+                    count = len(pool.cardID.all()) - 1
+                    c = random.randint(0,count)
+                    card = pool.cardID.all()[c]
+                    Hand.objects.get(playerID = plays).cardID.add(card)
+                    pool.cardID.remove(card)
+                    go = False
+                    for user in users:
+                        if go:
+                            game.turn = user.playerID
+                        if int(game.turn) == user.playerID:
+                            go = True
+                    if not go:
+                        for user in users:
+                            if go:
+                                game.turn = user.playerID
+                            if int(game.turn) == user.playerID:
+                                go = True
+
+            for card in Hand.objects.get(playerID = plays).cardID.all():
+                count = 0
+                for c in Hand.objects.get(playerID = plays).cardID.all():
+                    if c.rank == card.rank:
+                        count = count + 1
+                if count >= 4:
+                    for c in Hand.objects.get(playerID = plays).cardID.all():
+                        if c.rank == card.rank:
+                            Hand.objects.get(playerID = plays).cardID.remove(c)
+                    plays.score = plays.score + 1
+
+            total = 0
+            top = plays
+            results = ""
+            for user in users:
+                total = total + user.score
+                results = results + " - ".join([str(user.displayName),str(user.score)]) + " "
+                if top.score < user.score:
+                    top = user
+            if total >= 13:
+                context_dict['winner'] = top
+                game.delete()
+
+
 
         for card in Hand.objects.get(playerID = plays).cardID.all():
             count = 0
@@ -192,12 +238,11 @@ def game(request, game_id = None):
             context_dict['winner'] = top
             game.delete()
 
-
         context_dict['results'] = results
         context_dict['pool'] = pool.cardID.all()
         context_dict['GameID'] = game_id
         context_dict['hand'] = hand.cardID.all()
-        context_dict['Player'] = player.displayName
+        context_dict['Player'] = player
         context_dict['users'] = users
         context_dict['playerNumber'] = game.numOfPlayers
     else:
