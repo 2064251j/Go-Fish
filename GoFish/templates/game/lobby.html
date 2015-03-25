@@ -59,8 +59,11 @@
                                     <INPUT TYPE=CHECKBOX NAME="rule7" disabled>If the other players got all their matches and one player has a card left while no more go-fish cards to draw, the player with the remaining card loses the game.<P>
                                 </div>
                             </div>
-                            <button type="submit" class="btn btn-default">Start the game!</button>
+                            {% if Creator %}
+                                <button type="submit" class="btn btn-default">Start the game!</button>
+                            {% endif %}
                         </FORM>
+                        <div id = response></div>
                     </div>
                 </div>
             </div>

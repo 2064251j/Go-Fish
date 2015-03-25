@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from game.forms import Name
 from game.models import Game, Player, Hand, Pool, Card
+from django.http import HttpResponse
 import random
 
 def index(request):
@@ -11,6 +12,12 @@ def index(request):
 
 def lobby(request, game_id = None):
     context_dict = {}
+    if request.is_ajax():
+        if Game.objects.get(lobbyID = game_id).exists():
+            if Game.objects.get(lobbyID = game_id).started:
+                return HttpResponse('Game is ready.')
+            else:
+                return HttpResponse('Waiting...')
     # If there is no such a game:
     if game_id == None:
         # If player is in different game
