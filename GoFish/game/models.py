@@ -1,4 +1,5 @@
 from django.db import models
+#from django.utils.decorators import property
 
 class Game(models.Model):
     lobbyID = models.CharField(max_length=128, unique=True)
@@ -31,12 +32,32 @@ class Hand(models.Model):
     playerID = models.ForeignKey(Player)
     cardID = models.ManyToManyField(Card)
 
+    @property
+    def cards_dict(self):
+        dict = {}
+        try:
+            for card in self.cardID.all():
+                dict[card.cardID] = {"suit": card.suit, "rank": card.rank}
+        except:
+            pass
+        return dict
+
     def __unicode__(self):
         return unicode(self.playerID)
 
 class Pool(models.Model):
     lobbyID = models.ForeignKey(Game)
     cardID = models.ManyToManyField(Card)
+
+    @property
+    def cards_dict(self):
+        dict = {}
+        try:
+            for card in self.cardID.all():
+                dict[card.cardID] = {"suit": card.suit, "rank": card.rank}
+        except:
+            pass
+        return dict
 
     def __unicode__(self):
         return unicode(self.lobbyID)

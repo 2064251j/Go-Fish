@@ -3,6 +3,7 @@ from game.forms import Name
 from game.models import Game, Player, Hand, Pool, Card
 from django.http import HttpResponse
 import random
+import json
 
 def index(request):
     context_dict = {}
@@ -17,6 +18,16 @@ def ready(request):
                 return HttpResponse('<button onclick="location.href=\'/game/'+gId+'/\'" class="btn btn-default">Join the game!</button>')
             else:
                 return HttpResponse('Waiting...')
+    return HttpResponse('Waiting.')
+
+def ready2(request):
+    if request.is_ajax():
+        player = Player.objects.get(playerID = request.session['Player'])
+        hand = Hand.objects.get(playerID = player).cardID.all()
+        string = ""
+        for card in hand:
+            string = string + "<div class=\"radio\"> <label><input type=\"radio\" name=\"wanted\" id="+str(card.rank)+" value="+str(card.rank)+" checked>"+str(card.rank)+" "+str(card.suit)+"</label></div>"
+        return HttpResponse(string)
     return HttpResponse('Waiting.')
 
 
@@ -140,105 +151,6 @@ def game(request, game_id = None):
 
         hand = Hand.objects.get(playerID = player)                   # Get players hand
 
-        # Game logics:
-        plays = Player.objects.get(playerID = int(game.turn))
-        if len(Hand.objects.filter(playerID = plays)) == 0:
-            if len(pool) >= 5:
-                for i in range(5):
-                    count = len(pool.cardID.all()) - 1
-                    c = random.randint(0,count)
-                    card = pool.cardID.all()[c]
-                    hand.cardID.add(card)
-                    pool.cardID.remove(card)
-            else:
-                for i in range(len(pool)):
-                    count = len(pool.cardID.all()) - 1
-                    c = random.randint(0,count)
-                    card = pool.cardID.all()[c]
-                    hand.cardID.add(card)
-                    pool.cardID.remove(card)
-
-        if request.is_ajax():
-            gId = request.POST['id']
-            person = request.POST["target"]
-            wanted = request.POST["wanted"]
-            if users.filter(playerID = person).exists():
-                target = users.filter(playerID = person)
-                crops = Hand.objects.get(playerID = target).cardID.all()
-                goFish = True
-                for card in crops:
-                    if card.rank == wanted:
-                        goFish = False
-                        Hand.objects.get(playerID = plays).cardID.add(card)
-                        Hand.objects.get(playerID = target).cardID.remove(card)
-                if goFish:
-                    count = len(pool.cardID.all()) - 1
-                    c = random.randint(0,count)
-                    card = pool.cardID.all()[c]
-                    Hand.objects.get(playerID = plays).cardID.add(card)
-                    pool.cardID.remove(card)
-                    go = False
-                    for user in users:
-                        if go:
-                            game.turn = user.playerID
-                        if int(game.turn) == user.playerID:
-                            go = True
-                    if not go:
-                        for user in users:
-                            if go:
-                                game.turn = user.playerID
-                            if int(game.turn) == user.playerID:
-                                go = True
-
-            for card in Hand.objects.get(playerID = plays).cardID.all():
-                count = 0
-                for c in Hand.objects.get(playerID = plays).cardID.all():
-                    if c.rank == card.rank:
-                        count = count + 1
-                if count >= 4:
-                    for c in Hand.objects.get(playerID = plays).cardID.all():
-                        if c.rank == card.rank:
-                            Hand.objects.get(playerID = plays).cardID.remove(c)
-                    plays.score = plays.score + 1
-
-            total = 0
-            top = plays
-            results = ""
-            for user in users:
-                total = total + user.score
-                results = results + " - ".join([str(user.displayName),str(user.score)]) + " "
-                if top.score < user.score:
-                    top = user
-            if total >= 13:
-                context_dict['winner'] = top
-                game.delete()
-
-
-
-        for card in Hand.objects.get(playerID = plays).cardID.all():
-            count = 0
-            for c in Hand.objects.get(playerID = plays).cardID.all():
-                if c.rank == card.rank:
-                    count = count + 1
-            if count >= 4:
-                for c in Hand.objects.get(playerID = plays).cardID.all():
-                    if c.rank == card.rank:
-                        Hand.objects.get(playerID = plays).cardID.remove(c)
-                plays.score = plays.score + 1
-
-        total = 0
-        top = plays
-        results = ""
-        for user in users:
-            total = total + user.score
-            results = results + " - ".join([str(user.displayName),str(user.score)]) + " "
-            if top.score < user.score:
-                top = user
-        if total >= 13:
-            context_dict['winner'] = top
-            game.delete()
-
-        context_dict['results'] = results
         context_dict['pool'] = pool.cardID.all()
         context_dict['GameID'] = game_id
         context_dict['hand'] = hand.cardID.all()
@@ -249,3 +161,76 @@ def game(request, game_id = None):
         return redirect('/lobby')
 
     return render(request, 'game/game.html', context_dict)
+
+def create_post(request):
+    if request.method == 'POST':
+        target = request.POST.get('target')
+        wanted = request.POST.get('wanted')
+        response_data = {}
+
+        if 'Player' in request.session:
+            player = Player.objects.get(playerID = request.session['Player'])
+            game = Game.objects.get(lobbyID = player.lobbyID)
+            hand = Hand.objects.get(playerID = player)
+            response_data['player'] = player.playerID
+            users = Player.objects.filter(lobbyID=game)
+            response_data['turn'] = False
+            this = False
+            for user in users:
+                if this:
+                    game.turn = user.playerID
+                    game.save()
+                if user == player:
+                    this = True
+            if not this:
+                for user in users:
+                    if this:
+                        game.turn = user.playerID
+                        game.save()
+                    if user == player:
+                        this = True
+            who = Player.objects.get(playerID=target)
+            hand2 = Hand.objects.get(playerID = who)
+            pool = Pool.objects.get(lobbyID = game)
+            fish = True
+            for card in hand2.cardID.all():
+                if card.rank == wanted:
+                    fish = False
+                    hand.cardID.add(card)
+                    hand2.cardID.remove(card)
+            if fish:
+                count = len(pool.cardID.all()) - 1
+                c = random.randint(0,count)
+                card = pool.cardID.all()[c]
+                hand.cardID.add(card)
+                pool.cardID.remove(card)
+
+            for card in hand.cardID.all():
+                count = 0
+                for c in hand.cardID.all():
+                    if c.rank == card.rank:
+                        count = count + 1
+                if count == 4:
+                    player.score = player.score + player.score
+                    player.save()
+                    for c in hand.cardID.all():
+                        if c.rank == card.rank:
+                            hand.cardID.remove(c)
+
+
+            response_data['hand'] = hand.cards_dict
+            response_data['who'] = who.playerID
+            response_data['score'] = player.score
+
+        response_data['target'] = target
+        response_data['wanted'] = wanted
+
+        return HttpResponse(
+            json.dumps(response_data),
+            content_type="application/json"
+        )
+    else:
+        return HttpResponse(
+            json.dumps({"nothing to see": "this isn't happening"}),
+            content_type="application/json"
+        )
