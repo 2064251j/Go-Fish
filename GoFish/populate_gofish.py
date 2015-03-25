@@ -6,7 +6,6 @@ django.setup()
 
 from game.models import Card
 
-
 def populate():
 
     id = 1          #Individual Card ID = 1-52
