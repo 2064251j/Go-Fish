@@ -8,6 +8,9 @@
     <h1>Game</h1>
 </div>
 	<div class="row placeholders">
+		playerNumber = 0;
+		{% for user in users %}
+			playerNumber++;
         {% if playerNumber == 2 %}
 			<style>
 			div.player1 {
