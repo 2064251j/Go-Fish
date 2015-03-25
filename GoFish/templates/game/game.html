@@ -8,7 +8,7 @@
     <h1>Game</h1>
 </div>
 	<div class="row placeholders">
-        {% if {{ playerNumber }} == 2 %}
+        {% if playerNumber == 2 %}
 			<style>
 			div.player1 {
 				position: absolute;
@@ -26,7 +26,7 @@
 			<div class="player2">Player2</div>		
 			</body>
 			
-		{% else if {{ playerNumber }} == 3 %}
+		{% elseif playerNumber == 3 %}
 			<style>
 			div.player1 {
 				position: absolute;
@@ -50,7 +50,7 @@
 			<div class="player3">Player3</div>		
 			</body>
 			
-		{% else if {{ playerNumber }} == 4 %} 
+		{% elseif playerNumber == 4 %} 
 			<style>
 			div.player1 {
 				position: absolute;
@@ -80,7 +80,7 @@
 			<div class="player4">Player4</div>
 			</body>
 			
-		{% else if {{ playerNumber }} == 5 %}
+		{% elseif playerNumber == 5 %}
 			<style>
 			div.player1 {
 				position: absolute;
@@ -116,7 +116,7 @@
 			<div class="player5">Player5</div>
 			</body>
 			
-		{% else if {{ playerNumber }} == 6 %}
+		{% elseif playerNumber == 6 %}
 			<style>
 			div.player1 {
 				position: absolute;
@@ -157,8 +157,7 @@
 			<div class="player5">Player5</div>
 			<div class="player6">Player6</div>
 			</body>
-		
-        endif
+        {% endif %}
 		<h5 style="position:absolute; left:50; top:20">score: {{ results }}. Number of players: {{ playerNumber }}.</h5>
     </div>
 {% endblock %}
