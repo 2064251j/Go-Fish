@@ -19,7 +19,7 @@ class Migration(migrations.Migration):
         migrations.RenameField(
             model_name='game',
             old_name='gameLobbyID',
-            new_name='lobbyID',
+            new_name='id',
         ),
         migrations.RenameField(
             model_name='game',
@@ -29,12 +29,12 @@ class Migration(migrations.Migration):
         migrations.RenameField(
             model_name='player',
             old_name='gameLobbyID',
-            new_name='lobbyID',
+            new_name='id',
         ),
         migrations.RenameField(
             model_name='pool',
             old_name='gameLobbyID',
-            new_name='lobbyID',
+            new_name='id',
         ),
         migrations.AddField(
             model_name='game',

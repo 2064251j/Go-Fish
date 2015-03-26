@@ -13,22 +13,41 @@ def index(request):
 def ready(request):
     if request.is_ajax():
         gId = request.POST['id']
-        if Game.objects.filter(lobbyID = gId).exists():
-            if Game.objects.get(lobbyID = gId).started:
-                return HttpResponse('<button onclick="location.href=\'/game/'+gId+'/\'" class="btn btn-default">Join the game!</button>')
+        string = ""
+        if Game.objects.filter(id = gId).exists():
+            game = Game.objects.get(id = gId)
+            users = Player.objects.filter(lobbyID=game)
+            player = Player.objects.get(id = request.session['Player'])
+            for user in users:
+                string += "<tr>"
+                if user == player:
+                    string += "<td class = \"info\" >" + str(user.displayName) + "</td>"
+                else:
+                    string = string + "<td>" + str(user.displayName) + "</td>"
+                string += "<tr>"
+            if Game.objects.get(id = gId).started:
+                return HttpResponse('<button onclick="location.href=\'/game/'+gId+'/\'" class="btn btn-default">Join the game!</button>;'+string)
             else:
-                return HttpResponse('Waiting...')
-    return HttpResponse('Waiting.')
+                if int(game.creator) == player.id:
+                    return HttpResponse(';'+string)
+    return HttpResponse('Waiting...;'+string)
 
 def ready2(request):
     if request.is_ajax():
-        player = Player.objects.get(playerID = request.session['Player'])
+        player = Player.objects.get(id = request.session['Player'])
         hand = Hand.objects.get(playerID = player).cardID.all()
-        string = ""
+        game = player.lobbyID
+        if int(game.turn) == player.id:
+            string = "True;"
+        else:
+            string = "False;"
+
         for card in hand:
-            string = string + "<div class=\"radio\"> <label><input type=\"radio\" name=\"wanted\" id="+str(card.rank)+" value="+str(card.rank)+" checked>"+str(card.rank)+" "+str(card.suit)+"</label></div>"
+            string += "<div class=\"radio\"> <label>" \
+                      "<input type=\"radio\" name=\"wanted\" id="+str(card.rank)+" value="+str(card.rank)+" checked>"\
+                      +str(card.rank)+" "+str(card.suit)+"</label></div>"
         return HttpResponse(string)
-    return HttpResponse('Waiting.')
+    return HttpResponse('Waiting...')
 
 
 
@@ -37,34 +56,36 @@ def lobby(request, game_id = None):
 
     # If there is no such a game:
     if game_id == None:
-        # If player is in different game
+        # If player has a session:
         if 'Player' in request.session:
-            if Player.objects.filter(playerID = request.session['Player']).exists():
-                player = Player.objects.get(playerID = request.session['Player'])
+            # If player in database:
+            if Player.objects.filter(id = request.session['Player']).exists():
+                player = Player.objects.get(id = request.session['Player'])
+            # Else delete session and reload:
             else:
                 del request.session['Player']
                 return redirect('/lobby')
-            if Game.objects.filter(lobbyID=player.lobbyID).exists():
-                return redirect('/lobby/'+str(player.lobbyID))
+            # If player still in the game, redirect him there:
+            return redirect('/lobby/'+str(player.lobbyID))
         key = 0
-        while Game.objects.filter(lobbyID=key).exists():
-            if Player.objects.filter(lobbyID=Game.objects.get(lobbyID = key)).exists():
+        while Game.objects.filter(id=key).exists():
+            if Player.objects.filter(lobbyID=Game.objects.get(id = key)).exists():
                 key = key + 1
             else:
-                Game.objects.get(lobbyID=key).delete()
-        game = Game.objects.create(numOfPlayers=1, lobbyID = key)
+                Game.objects.get(id=key).delete()
+        Game.objects.create(id=key)
         return redirect('lobby/'+str(key))
 
     if 'Player' in request.session:
         context_dict['Name'] = True
-        if Player.objects.filter(playerID = request.session['Player']).exists():
-            player = Player.objects.get(playerID = request.session['Player'])
+        if Player.objects.filter(id = request.session['Player']).exists():
+            player = Player.objects.get(id = request.session['Player'])
         else:
             del request.session['Player']
             return redirect('/lobby')
 
-        game = Game.objects.get(lobbyID = game_id)
-        if player.lobbyID != game and Game.objects.filter(lobbyID=player.lobbyID).exists():
+        game = Game.objects.get(id = game_id)
+        if player.lobbyID != game:
             return redirect('/lobby/'+str(player.lobbyID))
         if game.started == True:
             return redirect('/game/'+str(player.lobbyID))
@@ -72,37 +93,37 @@ def lobby(request, game_id = None):
         context_dict['GameID'] = game_id
         player.lobbyID = game
         player.save()
-        users = Player.objects.filter(lobbyID=game)
+        users = Player.objects.filter(lobbyID = game)
         context_dict['users'] = users
         game.numOfPlayers = len(users)
         game.save()
 
-        if game.creator == str(player.playerID):
+        if game.creator == str(player.id):
             context_dict['creator'] = True
     else:
         if request.method == 'POST':
             form = Name(request.POST)
             if form.is_valid():
                 context_dict['GameID'] = game_id
-                game = Game.objects.get(lobbyID = game_id)
+                game = Game.objects.get(id = game_id)
                 name = form.cleaned_data['Name']
                 key = 0
-                while Player.objects.filter(playerID=key).exists():
+                while Player.objects.filter(id=key).exists():
                     key = key + 1
-                player = Player.objects.create(displayName = name, lobbyID = game, playerID = key)
+                player = Player.objects.create(displayName = name, lobbyID = game, id=key)
                 if not game.creator:
-                    game.creator = str(player.playerID)
+                    game.creator = str(player.id)
                     game.save()
-                request.session['Player'] = player.playerID
+                request.session['Player'] = player.id
                 context_dict['Name'] = True
                 context_dict['Player'] = player
-                users = Player.objects.filter(lobbyID=game)
+                users = Player.objects.filter(lobbyID = game)
                 context_dict['users'] = users
 
                 game.numOfPlayers = len(users)
                 game.save()
 
-                if game.creator == str(player.playerID):
+                if game.creator == str(player.id):
                     context_dict['creator'] = True
         else:
             form = Name()
@@ -113,13 +134,13 @@ def lobby(request, game_id = None):
 def game(request, game_id = None):
     context_dict = {}
     # If game doesn't exist return to lobby:
-    if not Game.objects.filter(lobbyID = game_id).exists():
+    if not Game.objects.filter(id = game_id).exists():
         return redirect('/lobby')
 
     # If application user is a player:
     if 'Player' in request.session:
-        player = Player.objects.get(playerID = request.session['Player'])
-        game = Game.objects.get(lobbyID = game_id)
+        player = Player.objects.get(id = request.session['Player'])
+        game = Game.objects.get(id = game_id)
         # If player not in game return to lobby:
         if player.lobbyID != game:
             return redirect('/lobby')
@@ -131,12 +152,12 @@ def game(request, game_id = None):
             pool.cardID = all_cards
             pool.save()
             game.started = True                                 # Start the game
-            game.turn = str(Player.objects.filter(lobbyID=game)[0].playerID)
+            game.turn = str(Player.objects.filter(lobbyID = game)[0].id)
             game.save()
         else:                                                       # Already have a deck
             pool = Pool.objects.get(lobbyID = game)
 
-        users = Player.objects.filter(lobbyID=game)             # Get users
+        users = Player.objects.filter(lobbyID = game)             # Get users
         for user in users:
             user.score = 0                                          # Reset scores
             user.save()
@@ -169,27 +190,20 @@ def create_post(request):
         response_data = {}
 
         if 'Player' in request.session:
-            player = Player.objects.get(playerID = request.session['Player'])
-            game = Game.objects.get(lobbyID = player.lobbyID)
+            player = Player.objects.get(id = request.session['Player'])
+            game = player.lobbyID
             hand = Hand.objects.get(playerID = player)
-            response_data['player'] = player.playerID
-            users = Player.objects.filter(lobbyID=game)
-            response_data['turn'] = False
-            this = False
-            for user in users:
-                if this:
-                    game.turn = user.playerID
-                    game.save()
-                if user == player:
-                    this = True
-            if not this:
-                for user in users:
-                    if this:
-                        game.turn = user.playerID
+            users = Player.objects.filter(lobbyID = game)
+            for i in range(len(users)):
+                if (users[i] == player):
+                    if i < (len(users)-1):
+                        game.turn = str(users[i+1].id)
                         game.save()
-                    if user == player:
-                        this = True
-            who = Player.objects.get(playerID=target)
+                    else:
+                        game.turn = str(users[0].id)
+                        game.save()
+
+            who = Player.objects.get(id = target)
             hand2 = Hand.objects.get(playerID = who)
             pool = Pool.objects.get(lobbyID = game)
             fish = True
@@ -216,14 +230,6 @@ def create_post(request):
                     for c in hand.cardID.all():
                         if c.rank == card.rank:
                             hand.cardID.remove(c)
-
-
-            response_data['hand'] = hand.cards_dict
-            response_data['who'] = who.playerID
-            response_data['score'] = player.score
-
-        response_data['target'] = target
-        response_data['wanted'] = wanted
 
         return HttpResponse(
             json.dumps(response_data),

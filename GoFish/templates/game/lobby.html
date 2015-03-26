@@ -15,7 +15,7 @@
                     <div class="col-md-4 placeholder col-md-offset-1">
                         <table class="table table-bordered">
                             <caption> Players in the Lobby: </caption>
-                            <tbody>
+                            <tbody id = "users">
                                 {% for user in users %}
                                     <tr>
                                     {%if user == Player%}
@@ -33,7 +33,7 @@
                             <caption> The more the merrier: </caption>
                             <tbody><tr>
                             <td> Link for your friends: </td>
-                            <td class = "info" >http://GoFish2015.pythonanywhere.com/lobby/{{GameID}}/ </td>
+                            <td class = "info" >http://gofish2015.pythonanywhere.com/lobby/{{GameID}}/ </td>
                             </tr></tbody>
                         </table>
                     </div>
