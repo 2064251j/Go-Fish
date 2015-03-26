@@ -58,7 +58,13 @@ def lobby(request, game_id = None):
             # If player still in the game, redirect him there:
             if Game.objects.filter(id = player.lobbyID).exists():
                 return redirect('/lobby/'+str(player.lobbyID))
-        Game.objects.create(numOfPlayers = 1)
+        key = 0
+        while Game.objects.filter(id=key).exists():
+            if Player.objects.filter(lobbyID=Game.objects.get(id = key)).exists():
+                key = key + 1
+            else:
+                Game.objects.get(id=key).delete()
+        Game.objects.create(id=key)
         return redirect('lobby/'+str(key))
 
     if 'Player' in request.session:
@@ -92,7 +98,10 @@ def lobby(request, game_id = None):
                 context_dict['GameID'] = game_id
                 game = Game.objects.get(id = game_id)
                 name = form.cleaned_data['Name']
-                player = Player.objects.create(displayName = name, lobbyID = game)
+                key = 0
+                while Player.objects.filter(id=key).exists():
+                    key = key + 1
+                player = Player.objects.create(displayName = name, lobbyID = game, id=key)
                 if not game.creator:
                     game.creator = str(player.playerID)
                     game.save()
