@@ -17,7 +17,7 @@ function refresh() {
             $('#users').html(atr[1]);
         }
     });
-    setTimeout("refresh()", 1000);
+    setTimeout("refresh()", 2500);
 }
 
 function refresh2() {
@@ -40,7 +40,7 @@ function refresh2() {
             }
         }
     });
-    setTimeout("refresh2()", 1000);
+    setTimeout("refresh2()", 2500);
 }
 
 
