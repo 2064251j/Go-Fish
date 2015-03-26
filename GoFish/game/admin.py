@@ -2,10 +2,10 @@ from django.contrib import admin
 from game.models import Game, Player, Card, Hand, Pool
 
 class GameAdmin(admin.ModelAdmin):
-    list_display = ('lobbyID', 'numOfPlayers', 'creator', 'started', 'turn' )
+    list_display = ('id', 'numOfPlayers', 'creator', 'started', 'turn' )
 
 class PlayerAdmin(admin.ModelAdmin):
-    list_display = ('lobbyID', 'score', 'playerID', 'displayName')
+    list_display = ('id', 'score', 'displayName')
 
 class CardAdmin(admin.ModelAdmin):
     list_display = ('cardID', 'suit', 'rank')

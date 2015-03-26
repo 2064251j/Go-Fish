@@ -46,7 +46,7 @@ class Migration(migrations.Migration):
             name='Player',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('playerID', models.CharField(unique=True, max_length=128)),
+                ('id', models.CharField(unique=True, max_length=128)),
                 ('displayName', models.CharField(max_length=12)),
                 ('gameLobbyID', models.ForeignKey(to='game.Game')),
             ],
@@ -66,7 +66,7 @@ class Migration(migrations.Migration):
         ),
         migrations.AddField(
             model_name='hand',
-            name='playerID',
+            name='id',
             field=models.ForeignKey(to='game.Player'),
             preserve_default=True,
         ),
