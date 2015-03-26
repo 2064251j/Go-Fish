@@ -15,10 +15,19 @@ def ready(request):
         gId = request.POST['id']
         if Game.objects.filter(lobbyID = gId).exists():
             if Game.objects.get(lobbyID = gId).started:
+                game = Game.objects.get(lobbyID = gId)
+                users = Player.objects.filter(lobbyID=game)
+                player = Player.objects.get(playerID = request.session['Player'])
+                string = ""
+                for user in users:
+                    string = string + "<tr>"
+                    if user == player:
+                        string= string + "<td class = \"info\" >"+str(user.displayName)+"</td>"
+                    else:
+                        string= string + "<td>"+str(user.displayName)+"</td>"
+                    string = string + "</tr>"
                 return HttpResponse('<button onclick="location.href=\'/game/'+gId+'/\'" class="btn btn-default">Join the game!</button>')
-            else:
-                return HttpResponse('Waiting...')
-    return HttpResponse('Waiting.')
+    return HttpResponse('Waiting...')
 
 def ready2(request):
     if request.is_ajax():
@@ -28,7 +37,7 @@ def ready2(request):
         for card in hand:
             string = string + "<div class=\"radio\"> <label><input type=\"radio\" name=\"wanted\" id="+str(card.rank)+" value="+str(card.rank)+" checked>"+str(card.rank)+" "+str(card.suit)+"</label></div>"
         return HttpResponse(string)
-    return HttpResponse('Waiting.')
+    return HttpResponse('Waiting...')
 
 
 
