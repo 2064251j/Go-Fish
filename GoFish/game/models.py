@@ -8,7 +8,7 @@ class Game(models.Model):
     started = models.BooleanField(default=False)
 
     def __unicode__(self):
-        return self.lobbyID
+        return str(self.id)
 
 class Player(models.Model):
     lobbyID = models.ForeignKey(Game)
@@ -16,14 +16,14 @@ class Player(models.Model):
     displayName = models.CharField(max_length=12)
 
     def __unicode__(self):
-        return self.playerID
+        return str(self.id)
 
 class Card(models.Model):
     suit = models.CharField(max_length=10, default="")
     rank = models.CharField(max_length=1, default="")
 
     def __unicode__(self):
-        return unicode(self.cardID)
+        return str(self.id)
 
 class Hand(models.Model):
     playerID = models.ForeignKey(Player)
@@ -40,7 +40,7 @@ class Hand(models.Model):
         return dict
 
     def __unicode__(self):
-        return unicode(self.playerID)
+        return unicode(str(self.playerID))
 
 class Pool(models.Model):
     lobbyID = models.ForeignKey(Game)
@@ -57,4 +57,4 @@ class Pool(models.Model):
         return dict
 
     def __unicode__(self):
-        return unicode(self.lobbyID)
+        return unicode(str(self.lobbyID))

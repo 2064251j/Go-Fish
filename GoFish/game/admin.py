@@ -8,7 +8,7 @@ class PlayerAdmin(admin.ModelAdmin):
     list_display = ('id', 'score', 'displayName')
 
 class CardAdmin(admin.ModelAdmin):
-    list_display = ('cardID', 'suit', 'rank')
+    list_display = ('id', 'suit', 'rank')
 
 class HandAdmin(admin.ModelAdmin):
     list_display = ('playerID', 'get_cards')

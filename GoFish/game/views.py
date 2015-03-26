@@ -89,7 +89,7 @@ def lobby(request, game_id = None):
         game.numOfPlayers = len(users)
         game.save()
 
-        if game.creator == str(player.playerID):
+        if game.creator == str(player.id):
             context_dict['creator'] = True
     else:
         if request.method == 'POST':
@@ -103,9 +103,9 @@ def lobby(request, game_id = None):
                     key = key + 1
                 player = Player.objects.create(displayName = name, lobbyID = game, id=key)
                 if not game.creator:
-                    game.creator = str(player.playerID)
+                    game.creator = str(player.id)
                     game.save()
-                request.session['Player'] = player.playerID
+                request.session['Player'] = player.id
                 context_dict['Name'] = True
                 context_dict['Player'] = player
                 users = Player.objects.filter(lobbyID = game)
@@ -143,7 +143,7 @@ def game(request, game_id = None):
             pool.cardID = all_cards
             pool.save()
             game.started = True                                 # Start the game
-            game.turn = str(Player.objects.filter(lobbyID = game)[0].playerID)
+            game.turn = str(Player.objects.filter(lobbyID = game)[0].id)
             game.save()
         else:                                                       # Already have a deck
             pool = Pool.objects.get(lobbyID = game)
@@ -182,22 +182,22 @@ def create_post(request):
 
         if 'Player' in request.session:
             player = Player.objects.get(id = request.session['Player'])
-            game = Game.objects.get(id = player.lobbyID)
+            game = player.lobbyID
             hand = Hand.objects.get(playerID = player)
-            response_data['player'] = player.playerID
+            response_data['player'] = player.id
             users = Player.objects.filter(lobbyID = game)
             response_data['turn'] = False
             this = False
             for user in users:
                 if this:
-                    game.turn = user.playerID
+                    game.turn = user.id
                     game.save()
                 if user == player:
                     this = True
             if not this:
                 for user in users:
                     if this:
-                        game.turn = user.playerID
+                        game.turn = user.id
                         game.save()
                     if user == player:
                         this = True
@@ -231,7 +231,7 @@ def create_post(request):
 
 
             response_data['hand'] = hand.cards_dict
-            response_data['who'] = who.playerID
+            response_data['who'] = who.id
             response_data['score'] = player.score
 
         response_data['target'] = target
