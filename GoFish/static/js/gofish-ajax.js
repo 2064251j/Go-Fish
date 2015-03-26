@@ -11,10 +11,13 @@ function refresh() {
                 users : players,
                 },
         success: function(data) {
-            $('#response').html(data);
+            var atr = data.split(";");
+            $('#response').html(atr[0]);
+            $('#users').empty();
+            $('#users').html(atr[1]);
         }
     });
-    setTimeout("refresh()", 3000);
+    setTimeout("refresh()", 1000);
 }
 
 function refresh2() {
@@ -25,11 +28,19 @@ function refresh2() {
                 csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value,
                 },
         success: function(data) {
+            var atr = data.split(";");
+            if (atr[0]=="True"){
+             $('#play').show();
+
+            }
+            else{
+            $('#play').hide();
             var users = $('#cards').empty();
-            $('#cards').html(data);
+            $('#cards').html(atr[1]);
+            }
         }
     });
-    setTimeout("refresh2()", 3000);
+    setTimeout("refresh2()", 1000);
 }
 
 

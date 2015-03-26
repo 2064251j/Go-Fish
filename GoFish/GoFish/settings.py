@@ -53,6 +53,7 @@ MIDDLEWARE_CLASSES = (
 
 ROOT_URLCONF = 'GoFish.urls'
 
+
 WSGI_APPLICATION = 'GoFish.wsgi.application'
 
 TEMPLATE_DIRS = [
