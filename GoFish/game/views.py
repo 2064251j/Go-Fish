@@ -26,11 +26,13 @@ def ready(request):
                     string = string + "<td>" + str(user.displayName) + "</td>"
                 string += "<tr>"
             if Game.objects.get(id = gId).started:
-                return HttpResponse('<button onclick="location.href=\'/game/'+gId+'/\'" class="btn btn-default">Join the game!</button>;'+string)
+                return HttpResponse('false;<button onclick="location.href=\'/game/'+gId+'/\'" class="btn btn-default">Join the game!</button>;'+string)
             else:
                 if int(game.creator) == player.id:
-                    return HttpResponse(';'+string)
-    return HttpResponse('Waiting...;'+string)
+                    if game.numOfPlayers >= 2:
+                        return HttpResponse('true;<button type="submit" class="btn btn-default">Start the game!</button>;'+string)
+                    return HttpResponse('false;;'+string)
+    return HttpResponse('false;Waiting...;'+string)
 
 def ready2(request):
     if request.is_ajax():

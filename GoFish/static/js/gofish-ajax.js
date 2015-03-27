@@ -12,14 +12,19 @@ function refresh() {
                 },
         success: function(data) {
             var atr = data.split(";");
-            $('#response').html(atr[0]);
+            if (atr[0] == "true") {
+                $('#creator').html(atr[1]);
+            }
+            else {
+                $('#response').html(atr[1]);
+            }
             $('#users').empty();
-            $('#users').html(atr[1]);
+            $('#users').html(atr[2]);
         }
     });
     setTimeout("refresh()", 2500);
 }
-
+var re = true;
 function refresh2() {
     $.ajax({
         type: "POST",
@@ -30,13 +35,18 @@ function refresh2() {
         success: function(data) {
             var atr = data.split(";");
             if (atr[0]=="True"){
-             $('#play').show();
-
+                $('#play').show();
+                if (re){
+                    var users = $('#cards').empty();
+                    $('#cards').html(atr[1]);
+                    re = false;
+                }
             }
             else{
-            $('#play').hide();
-            var users = $('#cards').empty();
-            $('#cards').html(atr[1]);
+                re = true;
+                $('#play').hide();
+                var users = $('#cards').empty();
+                $('#cards').html(atr[1]);
             }
         }
     });
@@ -46,7 +56,6 @@ function refresh2() {
 
 
 function create_post() {
-    console.log("create post is working!") // sanity check
     $.ajax({
         url : "/create_post/", // the endpoint
         type : "POST", // http method
@@ -58,8 +67,7 @@ function create_post() {
         // handle a successful response
         success : function(json) {
             $('#wanted').val(''); // remove the value from the input
-            console.log(json); // log the returned json to the console
-            console.log("success"); // another sanity check
+            console.log(json)
         },
 
         // handle a non-successful response
