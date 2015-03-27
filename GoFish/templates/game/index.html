@@ -5,14 +5,12 @@
 
 {% block body_block %}
 
-
-
     <div class="row placeholders">
-	<a href="{% url 'lobby' %}"> <img src={%static "images/creategamebutton.png" %} style = "position: absolute; top: 250px; right: 400"></a>
+	<a href="{% url 'lobby' %}"> <img src={%static "images/creategamebutton.png" %} style = "position: relative; z-index: 100; top: 250px; left: 100px "></a>
     </div>
 
-<div style="position: absolute; left: 100px; top: 70px; height:500px;width:450px;border:1px solid #ccc;font:16px/28px Georgia, Garamond, Serif;overflow:auto;">
-----------------------BASIC RULES----------------------
+<div style="position: relative; left: 50px; bottom: 35px; height:500px;width:450px;border:1px solid #ccc;font:16px/28px Verdana;overflow:auto;">
+<p style="text-indent: 10em;">BASIC RULES</p>
 <br>Players: 2-6.
 <br>Each player gets five cards. If you are dealt a four of a kind, or get four of a kind during game play, those cards are removed from your hand, and you get a point.</br>
 <br>Moving clockwise, players take turns asking a specific player for a given rank of card. If someone asks you for a rank that you have, the cards are taken from your hand. if you do not have any cards of that rank, your opponent must go fish, taking one new card from the pile of cards.</br>
