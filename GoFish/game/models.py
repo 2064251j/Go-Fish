@@ -7,6 +7,14 @@ class Player(models.Model):
     def __unicode__(self):
         return str(self.id)
 
+class Card(models.Model):
+    suit = models.CharField(max_length=10, default="")
+    rank = models.CharField(max_length=1, default="")
+    image = models.ImageField()
+
+    def __unicode__(self):
+        return str(self.id)
+
 class Game(models.Model):
     creator = models.ForeignKey(Player)
     turn = models.ForeignKey(Player)
@@ -40,11 +48,3 @@ class Plays(models.Model):
         except:
             pass
         return dict
-
-class Card(models.Model):
-    suit = models.CharField(max_length=10, default="")
-    rank = models.CharField(max_length=1, default="")
-    image = models.ImageField()
-
-    def __unicode__(self):
-        return str(self.id)
