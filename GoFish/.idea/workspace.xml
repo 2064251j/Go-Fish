@@ -58,21 +58,21 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="populate.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="populate.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/populate.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.8013468" vertical-offset="204" max-vertical-offset="867">
+            <state vertical-scroll-proportion="0.0" vertical-offset="204" max-vertical-offset="867">
               <caret line="40" column="95" selection-start-line="40" selection-start-column="95" selection-end-line="40" selection-end-column="95" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="settings.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="settings.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/GoFish/settings.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="1157" max-vertical-offset="1785">
-              <caret line="94" column="15" selection-start-line="94" selection-start-column="15" selection-end-line="94" selection-end-column="15" />
+            <state vertical-scroll-proportion="0.74242425" vertical-offset="1123" max-vertical-offset="1751">
+              <caret line="92" column="23" selection-start-line="92" selection-start-column="23" selection-end-line="92" selection-end-column="23" />
               <folding />
             </state>
           </provider>
@@ -89,8 +89,8 @@
         <option value="$PROJECT_DIR$/game/admin.py" />
         <option value="$PROJECT_DIR$/GoFish/urls.py" />
         <option value="$PROJECT_DIR$/game/models.py" />
-        <option value="$PROJECT_DIR$/GoFish/settings.py" />
         <option value="$PROJECT_DIR$/populate.py" />
+        <option value="$PROJECT_DIR$/GoFish/settings.py" />
       </list>
     </option>
   </component>
@@ -548,18 +548,18 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/GoFish/settings.py">
+    <entry file="file://$PROJECT_DIR$/populate.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="1157" max-vertical-offset="1785">
-          <caret line="94" column="15" selection-start-line="94" selection-start-column="15" selection-end-line="94" selection-end-column="15" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="204" max-vertical-offset="867">
+          <caret line="40" column="95" selection-start-line="40" selection-start-column="95" selection-end-line="40" selection-end-column="95" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/populate.py">
+    <entry file="file://$PROJECT_DIR$/GoFish/settings.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.8013468" vertical-offset="204" max-vertical-offset="867">
-          <caret line="40" column="95" selection-start-line="40" selection-start-column="95" selection-end-line="40" selection-end-column="95" />
+        <state vertical-scroll-proportion="0.74242425" vertical-offset="1123" max-vertical-offset="1751">
+          <caret line="92" column="23" selection-start-line="92" selection-start-column="23" selection-end-line="92" selection-end-column="23" />
           <folding />
         </state>
       </provider>

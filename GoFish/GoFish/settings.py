@@ -92,8 +92,6 @@ STATIC_PATH = os.path.join(BASE_DIR,'static')
 
 STATIC_URL = '/static/'
 
-MEDIA_ROOT = '/static/CardPics/'
-
 STATICFILES_DIRS = (
     STATIC_PATH,
 )
