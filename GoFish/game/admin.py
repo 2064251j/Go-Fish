@@ -1,29 +1,24 @@
 from django.contrib import admin
-from game.models import Game, Player, Card, Hand, Pool
+from game.models import Game, Player, Card, Plays
+
+class PlaysInline(admin.TabularInline):
+    model = Plays
+    extra = 1
 
 class GameAdmin(admin.ModelAdmin):
-    list_display = ('id', 'numOfPlayers', 'creator', 'started', 'turn' )
+    inlines = (PlaysInline,)
+    list_display = ('id', 'creator', 'turn', 'started', 'players', 'get_pool')
+
+    def get_pool(self, obj):
+        return "\n".join([str(p.id) for p in obj.pool.all()])
 
 class PlayerAdmin(admin.ModelAdmin):
-    list_display = ('id', 'score', 'displayName')
+    inlines = (PlaysInline,)
+    list_display = ('id', 'displayName')
 
 class CardAdmin(admin.ModelAdmin):
-    list_display = ('id', 'suit', 'rank')
-
-class HandAdmin(admin.ModelAdmin):
-    list_display = ('playerID', 'get_cards')
-
-    def get_cards(self, obj):
-        return "\n".join([str(p.cardID) for p in obj.cardID.all()])
-
-class PoolAdmin(admin.ModelAdmin):
-    list_display = ('lobbyID','get_cards')
-
-    def get_cards(self, obj):
-        return ", \n".join([str(p.cardID) for p in obj.cardID.all()])
+    list_display = ('id', 'suit', 'rank', 'image')
 
 admin.site.register(Game, GameAdmin)
 admin.site.register(Player, PlayerAdmin)
 admin.site.register(Card, CardAdmin)
-admin.site.register(Hand, HandAdmin)
-admin.site.register(Pool, PoolAdmin)

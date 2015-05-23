@@ -1,60 +1,50 @@
 from django.db import models
 #from django.utils.decorators import property
 
-class Game(models.Model):
-    numOfPlayers = models.IntegerField(default=0)
-    creator = models.TextField(null=True)
-    turn = models.TextField(null=True)
-    started = models.BooleanField(default=False)
-
-    def __unicode__(self):
-        return str(self.id)
-
 class Player(models.Model):
-    lobbyID = models.ForeignKey(Game)
-    score = models.IntegerField(default=0)
     displayName = models.CharField(max_length=12)
 
     def __unicode__(self):
         return str(self.id)
 
-class Card(models.Model):
-    suit = models.CharField(max_length=10, default="")
-    rank = models.CharField(max_length=1, default="")
+class Game(models.Model):
+    creator = models.ForeignKey(Player)
+    turn = models.ForeignKey(Player)
+    players = models.ManyToManyField(Player, through='Plays')
+    started = models.BooleanField(default=False)
+    pool = models.ManyToManyField(Card)
+
+    @property
+    def cards_dict(self):
+        dict = {}
+        try:
+            for card in self.pool.all():
+                dict[card.id] = {"suit": card.suit, "rank": card.rank, "image": card.image}
+        except:
+            pass
+        return dict
 
     def __unicode__(self):
         return str(self.id)
 
-class Hand(models.Model):
-    playerID = models.ForeignKey(Player)
-    cardID = models.ManyToManyField(Card)
+class Plays(models.Model):
+    score = models.IntegerField(default=0)
+    hand = models.ManyToManyField(Card)
 
     @property
     def cards_dict(self):
         dict = {}
         try:
-            for card in self.cardID.all():
-                dict[card.cardID] = {"suit": card.suit, "rank": card.rank}
+            for card in self.hand.all():
+                dict[card.id] = {"suit": card.suit, "rank": card.rank, "image": card.image}
         except:
             pass
         return dict
 
-    def __unicode__(self):
-        return unicode(str(self.playerID))
-
-class Pool(models.Model):
-    lobbyID = models.ForeignKey(Game)
-    cardID = models.ManyToManyField(Card)
-
-    @property
-    def cards_dict(self):
-        dict = {}
-        try:
-            for card in self.cardID.all():
-                dict[card.cardID] = {"suit": card.suit, "rank": card.rank}
-        except:
-            pass
-        return dict
+class Card(models.Model):
+    suit = models.CharField(max_length=10, default="")
+    rank = models.CharField(max_length=1, default="")
+    image = models.ImageField()
 
     def __unicode__(self):
-        return unicode(str(self.lobbyID))
+        return str(self.id)
