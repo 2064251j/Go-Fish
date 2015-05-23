@@ -16,8 +16,8 @@ class Card(models.Model):
         return str(self.id)
 
 class Game(models.Model):
-    creator = models.ForeignKey(Player)
-    turn = models.ForeignKey(Player)
+    creator = models.ForeignKey(Player, related_name='creator')
+    turn = models.ForeignKey(Player, related_name='turn')
     players = models.ManyToManyField(Player, through='Plays')
     started = models.BooleanField(default=False)
     pool = models.ManyToManyField(Card)

@@ -36,10 +36,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="admin.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="admin.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/game/admin.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.25757575" vertical-offset="0" max-vertical-offset="594">
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="493">
               <caret line="9" column="54" selection-start-line="9" selection-start-column="54" selection-end-line="9" selection-end-column="54" />
               <folding>
                 <element signature="e#0#32#0" expanded="true" />
@@ -48,11 +48,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="models.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="models.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/game/models.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="969">
-              <caret line="39" column="38" selection-start-line="39" selection-start-column="38" selection-end-line="39" selection-end-column="38" />
+            <state vertical-scroll-proportion="0.45791245" vertical-offset="51" max-vertical-offset="969">
+              <caret line="19" column="55" selection-start-line="19" selection-start-column="55" selection-end-line="19" selection-end-column="55" />
               <folding />
             </state>
           </provider>
@@ -67,8 +67,8 @@
         <option value="$PROJECT_DIR$/static/js/gofish-ajax.js" />
         <option value="$PROJECT_DIR$/GoFish/settings.py" />
         <option value="$PROJECT_DIR$/game/views.py" />
-        <option value="$PROJECT_DIR$/game/models.py" />
         <option value="$PROJECT_DIR$/game/admin.py" />
+        <option value="$PROJECT_DIR$/game/models.py" />
       </list>
     </option>
   </component>
@@ -580,21 +580,21 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/game/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="969">
-          <caret line="39" column="38" selection-start-line="39" selection-start-column="38" selection-end-line="39" selection-end-column="38" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/game/admin.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.25757575" vertical-offset="0" max-vertical-offset="594">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="493">
           <caret line="9" column="54" selection-start-line="9" selection-start-column="54" selection-end-line="9" selection-end-column="54" />
           <folding>
             <element signature="e#0#32#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/game/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.45791245" vertical-offset="51" max-vertical-offset="969">
+          <caret line="19" column="55" selection-start-line="19" selection-start-column="55" selection-end-line="19" selection-end-column="55" />
+          <folding />
         </state>
       </provider>
     </entry>
