@@ -37,8 +37,8 @@ def populate():
             rankId = 1        #Resets rank back to 1 for each new suit. (Every 14th card)
             suitId += 1       #Increments suit every 14th card.
 
-def add_card(cardID, suit, rank):
-    c = Card.objects.get_or_create(suit=suit, rank=rank, image=str(id).join(('static\CardPics', '.png')))[0]
+def add_card(id, suit, rank):
+    c = Card.objects.get_or_create(suit=suit, rank=rank, image=str(id).join(('/static/CardPics', '.png')))[0]
     return c
 
 if __name__ == '__main__':
