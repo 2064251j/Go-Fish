@@ -36,6 +36,8 @@ class Game(models.Model):
         return str(self.id)
 
 class Plays(models.Model):
+    game = models.ForeignKey(Game)
+    player = models.ForeignKey(Player)
     score = models.IntegerField(default=0)
     hand = models.ManyToManyField(Card)
 

@@ -7,7 +7,7 @@ class PlaysInline(admin.TabularInline):
 
 class GameAdmin(admin.ModelAdmin):
     inlines = (PlaysInline,)
-    list_display = ('id', 'creator', 'turn', 'started', 'players', 'get_pool')
+    list_display = ('id', 'creator', 'turn', 'started', 'get_pool')
 
     def get_pool(self, obj):
         return "\n".join([str(p.id) for p in obj.pool.all()])
