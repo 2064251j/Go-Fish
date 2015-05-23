@@ -7,6 +7,8 @@ import json
 
 def index(request):
     context_dict = {}
+    card  = Card.objects.get(id = 208)
+    context_dict['card'] = card.image
     # Render the response and send it back!
     return render(request, 'game/index.html', context_dict)
 
