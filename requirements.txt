@@ -22,7 +22,7 @@ bpython==0.12
 BTrees==4.0.8
 bzr==2.6.0
 cairocffi==0.5.3
-CairoSVG==1.0.6
+CairoSVG==2.5.1
 census==0.6
 cffi==0.8.2
 Chameleon==2.11
