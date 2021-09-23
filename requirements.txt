@@ -2,7 +2,7 @@
 aggdraw==1.1.post20051010
 alembic==0.6.2
 aniso8601==0.92
-ansible==1.5.4
+ansible==4.2.0
 argh==0.26.1
 async==0.6.1
 Augustus==0.5.3.0
